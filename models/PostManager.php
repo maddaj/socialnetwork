@@ -29,11 +29,17 @@ function GetAllPostsFromUserId($userId)
 function SearchInPosts($search)
 {
   global $PDO;
-  $response = $PDO->query(
+  $response = $PDO->prepare(
     "SELECT post.*, user.nickname "
       . "FROM post LEFT JOIN user on (post.user_id = user.id) "
-      . "WHERE content Like '%$search%'"
+      . "WHERE content like :search "
       . "ORDER BY post.created_at DESC"
+  );
+  $searchWithPercent = "%$search%";
+  $response->execute(
+    array(
+      "search" => $searchWithPercent
+    )
   );
   return $response->fetchAll();
 }

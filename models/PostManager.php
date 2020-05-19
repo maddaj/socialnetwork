@@ -37,3 +37,17 @@ function SearchInPosts($search)
   );
   return $response->fetchAll();
 }
+
+function CreateNewPost($userId, $msg)
+{
+  global $PDO;
+  if (!empty($userId) && !empty($msg)) {
+    $preparedRequest = $PDO->prepare("INSERT INTO post(user_id, content) values ($userId, '$msg')");
+    $preparedRequest->execute(
+      array(
+        "pseudo" => $userId,
+        "message" => $msg
+      )
+    );
+  }
+}

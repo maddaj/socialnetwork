@@ -4,8 +4,13 @@ include_once "PDO.php";
 function GetOneCommentFromId($id)
 {
   global $PDO;
-  $response = $PDO->query("SELECT * FROM comment WHERE id = $id");
-  return $response->fetch();
+  $response = $PDO->prepare("SELECT * FROM comment WHERE id = :id ");
+  $response->execute(
+    array(
+      "id" => $id
+    )
+  );
+  return $response->fetchAll();
 }
 
 function GetAllComments()
@@ -18,11 +23,11 @@ function GetAllComments()
 function GetAllCommentsFromUserId($userId)
 {
   global $PDO;
-  $response = $PDO->query(
-    "SELECT comment.*, user.nickname "
-      . "FROM comment LEFT JOIN user on (comment.user_id = user.id) "
-      . "WHERE comment.user_id = $userId "
-      . "ORDER BY comment.created_at ASC"
+  $response = $PDO->prepare("SELECT comment.*, user.nickname FROM comment LEFT JOIN user on (comment.user_id = user.id) WHERE comment.user_id = :id ");
+  $response->execute(
+    array(
+      "id" => $userId
+    )
   );
   return $response->fetchAll();
 }

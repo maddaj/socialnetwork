@@ -4,8 +4,13 @@ include_once "PDO.php";
 function GetOnePostFromId($id)
 {
   global $PDO;
-  $response = $PDO->query("SELECT * FROM post WHERE id = $id");
-  return $response->fetch();
+  $response = $PDO->prepare("SELECT * FROM post WHERE id = :id ");
+  $response->execute(
+    array(
+      "id" => $id
+    )
+  );
+  return $response->fetchAll();
 }
 
 function GetAllPosts()
@@ -22,7 +27,12 @@ function GetAllPosts()
 function GetAllPostsFromUserId($userId)
 {
   global $PDO;
-  $response = $PDO->query("SELECT * FROM post WHERE user_id = $userId ORDER BY created_at DESC");
+  $response = $PDO->prepare("SELECT * FROM post WHERE user_id = :id ORDER BY created_at DESC");
+  $response->execute(
+    array(
+      "id" => $userId
+    )
+  );
   return $response->fetchAll();
 }
 

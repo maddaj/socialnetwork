@@ -58,11 +58,11 @@ function CreateNewPost($userId, $msg)
 {
   global $PDO;
   if (!empty($userId) && !empty($msg)) {
-    $preparedRequest = $PDO->prepare("INSERT INTO post(user_id, content) values ($userId, '$msg')");
-    $preparedRequest->execute(
+    $response = $PDO->prepare("INSERT INTO post(user_id, content) values (:userId, :msg)");
+    $response->execute(
       array(
-        "pseudo" => $userId,
-        "message" => $msg
+        "userId" => $userId,
+        "msg" => $msg
       )
     );
   }
